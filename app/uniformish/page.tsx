@@ -2,19 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Navigation from '@/components/shared/Navigation';
-import EmailSignup from '@/components/shared/EmailSignup';
+import Hero from '@/components/shared/Hero';
+import SectionHeader from '@/components/shared/SectionHeader';
+import FeatureCard from '@/components/shared/FeatureCard';
+import Footer from '@/components/shared/Footer';
+import ProductCard from '@/components/ui/ProductCard';
+import { FadeIn, Stagger } from '@/components/ui/AnimatedWrappers';
+import { ArrowRight, Leaf, Lightning, Infinity } from '@/components/ui/Icons';
 import { getTracker } from '@/lib/tracking';
 import { useABTest } from '@/lib/ab-testing';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  material: string;
-  limited: number;
-  sizes: string[];
-}
 
 export default function UniformishPage() {
   const [sessionId, setSessionId] = useState('');
@@ -26,315 +22,211 @@ export default function UniformishPage() {
     }
   }, [tracker]);
 
-  // A/B test for hero image type
   const heroImageVariant = useABTest('uniformish_hero_image', sessionId);
 
-  const products: Product[] = [
+  const products = [
     {
       id: 'uniform-001',
       name: 'Essential Tee',
       price: 68,
-      description: 'Heavy-weight organic cotton. Pre-shrunk. Built to last decades.',
-      material: '100% Organic Cotton, 220 GSM',
+      description: 'Heavy-weight organic cotton. Pre-shrunk. Built to last decades, not seasons.',
+      brand: 'uniformish' as const,
       limited: 75,
-      sizes: ['XS', 'S', 'M', 'L', 'XL'],
+      gradient: 'from-blue-900/10 to-blue-800/5',
+      metadata: [
+        { label: 'Material', value: '100% Organic Cotton, 220 GSM' },
+        { label: 'Origin', value: 'Turkey (GOTS Certified)' },
+        { label: 'Carbon', value: '2.3kg CO2 (offset)' },
+      ],
     },
     {
       id: 'uniform-002',
       name: 'Work Jacket',
       price: 295,
-      description: 'Durable canvas shell. Brass hardware. Improves with age.',
-      material: 'Organic Canvas, Sterling Hardware',
+      description: 'Durable canvas shell. Brass hardware. Improves with age like denim.',
+      brand: 'uniformish' as const,
       limited: 50,
-      sizes: ['S', 'M', 'L', 'XL'],
+      gradient: 'from-blue-900/10 to-blue-800/5',
+      metadata: [
+        { label: 'Material', value: 'Organic Canvas, Sterling Hardware' },
+        { label: 'Weight', value: '14oz per yard' },
+        { label: 'Warranty', value: 'Lifetime repair' },
+      ],
     },
     {
       id: 'uniform-003',
       name: 'Utility Pant',
       price: 178,
-      description: 'Reinforced seams. Articulated knees. Lifetime repair guarantee.',
-      material: 'Japanese Twill, YKK Zippers',
+      description: 'Reinforced seams. Articulated knees. The last pants you'll ever buy.',
+      brand: 'uniformish' as const,
       limited: 60,
-      sizes: ['28', '30', '32', '34', '36', '38'],
+      gradient: 'from-blue-900/10 to-blue-800/5',
+      metadata: [
+        { label: 'Material', value: 'Japanese Twill, YKK Zippers' },
+        { label: 'Fit', value: 'Relaxed, tapered' },
+        { label: 'Details', value: 'Triple-stitched, bar-tacked' },
+      ],
     },
   ];
 
-  const handleProductClick = (product: Product) => {
-    if (tracker) {
-      tracker.trackProductEngagement(product.id, product.name, 'click');
-    }
-  };
+  const principles = [
+    {
+      title: 'Radical Transparency',
+      description: 'Know exactly where your garment came from. Mill location, dye process, labor costs, carbon footprint. We publish everything. No secrets, no greenwashing.',
+      icon: <Leaf className="w-12 h-12" />,
+    },
+    {
+      title: 'Lifetime Guarantee',
+      description: 'We repair your Uniformish garment for free, forever. Ripped seam? Send it back. Worn zipper? We'll replace it. Built to outlast you.',
+      icon: <Infinity className="w-12 h-12" />,
+    },
+    {
+      title: 'Honest Scarcity',
+      description: 'Every drop is limited to 50-75 units. Not marketing—production reality. When it's gone, it's gone. No restocks. No pre-orders. Just truth.',
+      icon: <Lightning className="w-12 h-12" />,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-uniformish-bg text-uniformish-text">
       <Navigation variant="dark" currentPage="uniformish" />
 
-      {/* Hero Section */}
-      <section className="section-padding pt-32 hero">
-        <div className="container-custom">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-uniformish-accent font-medium mb-4 tracking-wide uppercase text-sm">
-                Collapse & Rebirth
-              </p>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                Apparel Built to Last Decades, Not Seasons
-              </h1>
-              <p className="text-xl text-gray-400 mb-8 leading-relaxed">
-                Limited edition drops. Sustainable materials. Radical transparency.
-                Every piece is numbered, documented, and designed to be the last
-                version you'll ever need to buy.
-              </p>
-              <div className="flex gap-4">
-                <button
-                  className="btn-primary bg-uniformish-accent text-white cta"
-                  data-track-id="uniformish-cta-primary"
-                >
-                  View Current Drop
-                </button>
-                <button
-                  className="btn-primary border border-white/20 text-white hover:bg-white/10"
-                  data-track-id="uniformish-cta-secondary"
-                >
-                  Our Philosophy
-                </button>
-              </div>
-            </div>
+      <Hero
+        variant="dark"
+        badge={{ icon: <Leaf className="w-4 h-4" />, text: 'Collapse & Rebirth' }}
+        title="The Last Apparel You'll Ever Buy"
+        subtitle={
+          <>
+            <strong className="text-white">Uniformish rejects the 100 billion garment wasteland.</strong>
+            <br className="hidden md:block" />
+            Limited edition drops. Radical transparency. Lifetime repairs.
+            <br className="hidden md:block" />
+            Every piece numbered, documented, and built to outlast trends, seasons, and you.
+          </>
+        }
+        buttons={[
+          { label: 'View Current Drop', variant: 'primary', icon: <ArrowRight />, dataTrackId: 'uniformish-cta-drop' },
+          { label: 'Our Philosophy', variant: 'outline', dataTrackId: 'uniformish-cta-philosophy' },
+        ]}
+      />
 
-            {/* Hero Image/Visual */}
-            <div className="bg-uniformish-charcoal h-96 rounded-lg flex items-center justify-center">
-              {heroImageVariant === 'variant_a' ? (
-                <div className="text-center">
-                  <div className="text-6xl mb-4">👤</div>
-                  <p className="text-sm text-gray-500">Lifestyle Shot</p>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <div className="text-6xl mb-4">👕</div>
-                  <p className="text-sm text-gray-500">Flat Lay</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why We Exist Section */}
       <section className="section-padding bg-black">
         <div className="container-custom">
-          <h2 className="text-4xl font-bold mb-12 text-center">Why We Exist</h2>
-
+          <SectionHeader title="Why Uniformish Exists" />
           <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-uniformish-accent">Against Fast Fashion</h3>
-              <p className="text-gray-400">
-                The apparel industry produces 100 billion garments annually. Most are
-                worn less than 10 times before disposal. Uniformish exists to collapse
-                this wasteful cycle.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-uniformish-accent">Limited by Design</h3>
-              <p className="text-gray-400">
-                Every drop is limited to 50-75 units. We don't restock. When it's gone,
-                it's gone. Scarcity isn't a marketing tactic—it's a production philosophy.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-uniformish-accent">Radical Transparency</h3>
-              <p className="text-gray-400">
-                Know exactly where your garment came from: mill location, dye process,
-                labor costs, carbon footprint. We hide nothing.
-              </p>
-            </div>
+            <Stagger staggerDelay={0.15}>
+              {principles.map((principle) => (
+                <FeatureCard key={principle.title} {...principle} className="bg-uniformish-charcoal hover:bg-uniformish-charcoal/80 text-white" />
+              ))}
+            </Stagger>
           </div>
         </div>
       </section>
 
-      {/* Product Showcase */}
       <section className="section-padding">
         <div className="container-custom">
-          <h2 className="text-4xl font-bold mb-4">Current Drop</h2>
-          <p className="text-gray-400 mb-12 text-lg">
-            Limited availability. Ships within 2 weeks of drop close.
-          </p>
-
+          <SectionHeader
+            title="Current Drop"
+            subtitle="Limited availability. Ships within 2 weeks. Every piece numbered and documented."
+          />
           <div className="grid md:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-uniformish-charcoal rounded-lg overflow-hidden group cursor-pointer product-card product"
-                data-track-id={`product-${product.id}`}
-                onClick={() => handleProductClick(product)}
-              >
-                {/* Product Image Placeholder */}
-                <div className="h-80 bg-gray-800 flex items-center justify-center group-hover:bg-gray-700 transition-colors">
-                  <span className="text-6xl">👕</span>
-                </div>
-
-                {/* Product Details */}
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold">{product.name}</h3>
-                    <span className="text-uniformish-accent font-bold">${product.price}</span>
-                  </div>
-
-                  <p className="text-sm text-gray-400 mb-4">{product.description}</p>
-
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Material:</span>
-                      <span className="text-gray-300">{product.material}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Limited:</span>
-                      <span className="text-uniformish-accent font-medium">
-                        {product.limited} units
-                      </span>
-                    </div>
-                  </div>
-
-                  <button
-                    className="w-full mt-4 btn-primary bg-white text-black hover:bg-gray-200 cta"
-                    data-track-id={`product-cta-${product.id}`}
-                  >
-                    Join Waitlist
-                  </button>
-                </div>
-              </div>
-            ))}
+            <Stagger staggerDelay={0.1}>
+              {products.map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
+            </Stagger>
           </div>
         </div>
       </section>
 
-      {/* Material Details Section */}
       <section className="section-padding bg-uniformish-charcoal">
         <div className="container-custom">
-          <h2 className="text-4xl font-bold mb-12 text-center">Material Specifications</h2>
-
+          <SectionHeader title="Material Obsession" subtitle="Where your garment comes from matters. Here's everything." />
           <div className="max-w-3xl mx-auto space-y-8">
-            <div className="border-l-4 border-uniformish-accent pl-6">
-              <h3 className="text-xl font-bold mb-2">Organic Cotton</h3>
-              <p className="text-gray-400">
-                Sourced from GOTS-certified farms in Turkey. Zero pesticides, zero GMOs.
-                Heavy 220 GSM weight for durability and structure.
-              </p>
-            </div>
-
-            <div className="border-l-4 border-uniformish-accent pl-6">
-              <h3 className="text-xl font-bold mb-2">Natural Dyes</h3>
-              <p className="text-gray-400">
-                Plant-based dyes from indigo, walnut, and madder root. Colors evolve
-                over time, creating unique patina and character.
-              </p>
-            </div>
-
-            <div className="border-l-4 border-uniformish-accent pl-6">
-              <h3 className="text-xl font-bold mb-2">Lifetime Repair</h3>
-              <p className="text-gray-400">
-                We repair your Uniformish garment for free, forever. Send it back and
-                we'll make it right. Built to outlast trends, outlast you.
-              </p>
-            </div>
+            <FadeIn>
+              <div className="border-l-4 border-uniformish-accent pl-6">
+                <h3 className="text-xl font-bold mb-2">Organic Cotton (GOTS Certified)</h3>
+                <p className="text-gray-400">
+                  Sourced from certified farms in Turkey. Zero pesticides, zero GMOs. Heavy 220 GSM weight means durability and structure. Pre-washed to eliminate shrinkage.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn>
+              <div className="border-l-4 border-uniformish-accent pl-6">
+                <h3 className="text-xl font-bold mb-2">Natural Dyes Only</h3>
+                <p className="text-gray-400">
+                  Plant-based dyes from indigo, walnut, and madder root. No synthetic chemicals. Colors evolve over time, creating unique patina. Your garment ages with you.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn>
+              <div className="border-l-4 border-uniformish-accent pl-6">
+                <h3 className="text-xl font-bold mb-2">Lifetime Repair Policy</h3>
+                <p className="text-gray-400">
+                  Send it back, we'll fix it—for free, forever. Ripped? Patched. Faded? Re-dyed. Worn zipper? Replaced. We stand behind every stitch. Built to outlast trends, outlast you.
+                </p>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* Email Signup Section */}
-      <section className="section-padding">
-        <div className="container-custom text-center">
-          <h2 className="text-4xl font-bold mb-4">Join the Next Drop</h2>
-          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-            Get notified 48 hours before each limited drop goes live.
-          </p>
-          <div className="flex justify-center">
-            <EmailSignup
-              variant="dark"
-              formType="waitlist"
-              placeholder="Enter your email"
-              buttonText="Notify Me"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-black py-12 border-t border-white/10">
+      <section className="section-padding bg-gradient-to-br from-blue-900/20 to-blue-800/10">
         <div className="container-custom">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold text-lg mb-4">Uniformish</h3>
-              <p className="text-sm text-gray-500">
-                Part of the vSMPL Ecosystem
+          <FadeIn>
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">Carbon Accounting</h2>
+              <p className="text-xl text-gray-300 mb-8">
+                Every Uniformish product comes with a full carbon breakdown. We offset 120% of emissions through verified forestry projects. Transparency over marketing.
               </p>
+              <div className="grid md:grid-cols-3 gap-6 text-center">
+                <div className="bg-black/30 rounded-lg p-6">
+                  <div className="text-4xl font-bold text-uniformish-accent mb-2">2.3kg</div>
+                  <div className="text-sm text-gray-400">CO2 per Essential Tee</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-6">
+                  <div className="text-4xl font-bold text-uniformish-accent mb-2">120%</div>
+                  <div className="text-sm text-gray-400">Carbon offset</div>
+                </div>
+                <div className="bg-black/30 rounded-lg p-6">
+                  <div className="text-4xl font-bold text-uniformish-accent mb-2">0%</div>
+                  <div className="text-sm text-gray-400">Greenwashing</div>
+                </div>
+              </div>
             </div>
-
-            <div>
-              <h4 className="font-medium mb-4">Shop</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Current Drop
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Archive
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Size Guide
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-medium mb-4">About</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Our Story
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Materials
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Repairs
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-medium mb-4">Connect</h4>
-              <ul className="space-y-2 text-sm text-gray-500">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors social">
-                    Instagram
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors social">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-8 pt-8 border-t border-white/10 text-sm text-gray-500 text-center">
-            © 2024 Uniformish. All rights reserved.
-          </div>
+          </FadeIn>
         </div>
-      </footer>
+      </section>
+
+      <Footer
+        brandName="Uniformish"
+        tagline="Part of the vSMPL Ecosystem"
+        sections={[
+          {
+            title: 'Shop',
+            links: [
+              { label: 'Current Drop', href: '#' },
+              { label: 'Archive', href: '#' },
+              { label: 'Size Guide', href: '#' },
+            ],
+          },
+          {
+            title: 'About',
+            links: [
+              { label: 'Our Story', href: '#' },
+              { label: 'Materials', href: '#' },
+              { label: 'Repairs', href: '#' },
+            ],
+          },
+          {
+            title: 'Connect',
+            links: [
+              { label: 'Instagram', href: '#', isExternal: true },
+              { label: 'Contact', href: '#' },
+            ],
+          },
+        ]}
+      />
     </div>
   );
 }
