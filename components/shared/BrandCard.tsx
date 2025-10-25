@@ -37,7 +37,7 @@ export default function BrandCard({
     <Link href={href}>
       <ScaleOnHover>
         <motion.div
-          className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group"
+          className="relative bg-white rounded-2xl overflow-hidden card-shadow group border border-gray-100"
           whileHover={{ y: -4 }}
           data-track-id={dataTrackId}
         >

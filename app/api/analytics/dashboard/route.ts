@@ -105,7 +105,7 @@ export async function GET(request: NextRequest) {
       SELECT
         ab_test_variant,
         COUNT(DISTINCT user_session_id) as sessions,
-        SUM(CASE WHEN event_type = 'click' AND element_category = 'cta' THEN 1 ELSE 0 END) as cta_clicks
+        SUM(CASE WHEN event_type = 'click' AND element_id LIKE '%cta%' THEN 1 ELSE 0 END) as cta_clicks
       FROM analytics_events
       WHERE ab_test_variant IS NOT NULL ${dateFilter}
       GROUP BY ab_test_variant

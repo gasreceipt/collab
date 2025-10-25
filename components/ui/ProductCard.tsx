@@ -76,7 +76,7 @@ export default function ProductCard({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       onClick={handleClick}
-      className="group relative bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden"
+      className="group relative bg-white rounded-xl card-shadow cursor-pointer overflow-hidden border border-gray-100"
       data-track-id={`product-${id}`}
     >
       {/* Badge */}

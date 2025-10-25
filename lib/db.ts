@@ -17,17 +17,31 @@ if (!existsSync(backupDir)) {
 
 // Initialize database
 let db: Database.Database | null = null;
+let schemaInitialized = false;
 
 export function getDb(): Database.Database {
   if (!db) {
     db = new Database(dbPath, { verbose: console.log });
     db.pragma('journal_mode = WAL'); // Write-Ahead Logging for better performance
 
-    // Initialize schema if database is new
-    if (existsSync(schemaPath)) {
-      const schema = readFileSync(schemaPath, 'utf-8');
-      db.exec(schema);
-      console.log('✅ Database schema initialized');
+    // Initialize schema only if database is new (no tables exist)
+    if (!schemaInitialized && existsSync(schemaPath)) {
+      try {
+        // Check if tables already exist
+        const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='analytics_events'").all();
+        
+        if (tables.length === 0) {
+          // Database is empty, initialize schema
+          const schema = readFileSync(schemaPath, 'utf-8');
+          db.exec(schema);
+          console.log('✅ Database schema initialized');
+        } else {
+          console.log('✅ Database schema already exists');
+        }
+        schemaInitialized = true;
+      } catch (error) {
+        console.error('Error checking/initializing database schema:', error);
+      }
     }
   }
   return db;

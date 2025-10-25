@@ -84,7 +84,7 @@ export default function BadArcticPage() {
     },
     {
       title: 'Lifetime Warranty',
-      description: 'We repair or replace any Bad Arctic piece, forever. Broken? We'll fix it. Lost? Replacement discount. These pieces are built to outlast you.',
+      description: 'We repair or replace any Bad Arctic piece, forever. Broken? We\'ll fix it. Lost? Replacement discount. These pieces are built to outlast you.',
       icon: <Check className="w-12 h-12" />,
     },
   ];
@@ -144,13 +144,11 @@ export default function BadArcticPage() {
       <section className="section-padding bg-badArctic-ice">
         <div className="container-custom">
           <SectionHeader title="Our Philosophy" />
-          <div className="grid md:grid-cols-3 gap-8">
-            <Stagger staggerDelay={0.15}>
-              {philosophy.map((item) => (
-                <FeatureCard key={item.title} {...item} variant="elevated" />
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.15} className="feature-grid">
+            {philosophy.map((item) => (
+              <FeatureCard key={item.title} {...item} variant="elevated" />
+            ))}
+          </Stagger>
         </div>
       </section>
 
@@ -164,13 +162,11 @@ export default function BadArcticPage() {
                 : 'Hand-forged in limited batches. Ships in 2-4 weeks.'
             }
           />
-          <div className="grid md:grid-cols-3 gap-8">
-            <Stagger staggerDelay={0.1}>
-              {pieces.map((piece) => (
-                <ProductCard key={piece.id} {...piece} />
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.1} className="product-grid">
+            {pieces.map((piece) => (
+              <ProductCard key={piece.id} {...piece} />
+            ))}
+          </Stagger>
         </div>
       </section>
 
@@ -178,21 +174,19 @@ export default function BadArcticPage() {
         <div className="container-custom">
           <SectionHeader title="The Making Of" subtitle="Every piece is hand-forged using traditional silversmithing techniques" />
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <Stagger staggerDelay={0.1}>
-              {craftsmanship.map((item) => (
-                <FadeIn key={item.title}>
-                  <div className="bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-shadow">
-                    <div className="text-6xl mb-6 text-center">{item.icon}</div>
-                    <h3 className="text-2xl font-bold mb-3 text-center">{item.title}</h3>
-                    <p className="text-gray-700 font-sans text-center leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                </FadeIn>
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.1} className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {craftsmanship.map((item) => (
+              <FadeIn key={item.title}>
+                <div className="bg-white rounded-xl p-8 shadow-md hover:shadow-xl transition-shadow">
+                  <div className="text-6xl mb-6 text-center">{item.icon}</div>
+                  <h3 className="text-2xl font-bold mb-3 text-center">{item.title}</h3>
+                  <p className="text-gray-700 font-sans text-center leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
+          </Stagger>
         </div>
       </section>
 

@@ -44,7 +44,7 @@ export default function CatnipPage() {
       id: 'catnip-002',
       name: 'Urban Flora',
       price: 105,
-      description: 'Javier Ruiz's botanical line work meets street art. Ride-ready Canadian maple.',
+      description: 'Javier Ruiz\'s botanical line work meets street art. Ride-ready Canadian maple.',
       brand: 'catnip' as const,
       limited: 35,
       gradient: 'from-green-400/20 to-teal-500/20',
@@ -58,7 +58,7 @@ export default function CatnipPage() {
       id: 'catnip-003',
       name: 'Night Shift',
       price: 110,
-      description: 'Kenji Tanaka's blacklight reactive ink. Glow-in-the-dark details. Limited collab.',
+      description: 'Kenji Tanaka\'s blacklight reactive ink. Glow-in-the-dark details. Limited collab.',
       brand: 'catnip' as const,
       limited: 25,
       gradient: 'from-purple-600/20 to-indigo-700/20',
@@ -83,7 +83,7 @@ export default function CatnipPage() {
     },
     {
       title: 'Community Building',
-      description: 'Catnip sponsors local skaters, funds DIY parks, and hosts monthly skate jams. We're not selling boards—we're building scenes. One deck at a time.',
+      description: 'Catnip sponsors local skaters, funds DIY parks, and hosts monthly skate jams. We\'re not selling boards—we\'re building scenes. One deck at a time.',
       icon: <Fire className="w-12 h-12" />,
     },
   ];
@@ -115,29 +115,25 @@ export default function CatnipPage() {
       <section className="section-padding bg-white">
         <div className="container-custom">
           <SectionHeader title="Why Handmade Matters" />
-          <div className="grid md:grid-cols-3 gap-8">
-            <Stagger staggerDelay={0.15}>
-              {principles.map((principle) => (
-                <FeatureCard key={principle.title} {...principle} />
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.15} className="feature-grid">
+            {principles.map((principle) => (
+              <FeatureCard key={principle.title} {...principle} />
+            ))}
+          </Stagger>
         </div>
       </section>
 
-      <section className="section-padding bg-gradient-to-br from-catnip-accent/10 to-catnip-warm">
+      <section className="section-padding bg-catnip-warm">
         <div className="container-custom">
           <SectionHeader
             title="Current Collection"
             subtitle="Limited runs. Hand-painted. Ships in 2-3 weeks. Artists get paid fairly."
           />
-          <div className="grid md:grid-cols-3 gap-8">
-            <Stagger staggerDelay={0.1}>
-              {decks.map((deck) => (
-                <ProductCard key={deck.id} {...deck} />
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.1} className="product-grid">
+            {decks.map((deck) => (
+              <ProductCard key={deck.id} {...deck} />
+            ))}
+          </Stagger>
         </div>
       </section>
 
@@ -151,43 +147,41 @@ export default function CatnipPage() {
               />
             </FadeIn>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Stagger staggerDelay={0.1}>
-                <FadeIn>
-                  <div className="bg-gradient-to-br from-catnip-accent/5 to-catnip-warm/50 rounded-xl p-8 border-l-4 border-catnip-accent">
-                    <p className="text-lg text-gray-800 mb-4 italic">
-                      "Catnip decks feel like art you can ride. The imperfections make it yours. I've never felt more connected to my board."
-                    </p>
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-catnip-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
-                        A
-                      </div>
-                      <div>
-                        <p className="font-bold text-black">Alex Rivera</p>
-                        <p className="text-sm text-gray-600">Brooklyn, NY</p>
-                      </div>
+            <Stagger staggerDelay={0.1} className="grid md:grid-cols-2 gap-8 mb-12">
+              <FadeIn>
+                <div className="bg-gradient-to-br from-catnip-accent/5 to-catnip-warm/50 rounded-xl p-8 border-l-4 border-catnip-accent">
+                  <p className="text-lg text-gray-800 mb-4 italic">
+                    "Catnip decks feel like art you can ride. The imperfections make it yours. I've never felt more connected to my board."
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-catnip-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      A
+                    </div>
+                    <div>
+                      <p className="font-bold text-black">Alex Rivera</p>
+                      <p className="text-sm text-gray-600">Brooklyn, NY</p>
                     </div>
                   </div>
-                </FadeIn>
+                </div>
+              </FadeIn>
 
-                <FadeIn>
-                  <div className="bg-gradient-to-br from-catnip-accent/5 to-catnip-warm/50 rounded-xl p-8 border-l-4 border-catnip-accent">
-                    <p className="text-lg text-gray-800 mb-4 italic">
-                      "Supporting local artists and riding custom wood? That's the whole vibe. Plus they sponsor our DIY park. Real community shit."
-                    </p>
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-catnip-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
-                        S
-                      </div>
-                      <div>
-                        <p className="font-bold text-black">Sam Wu</p>
-                        <p className="text-sm text-gray-600">Portland, OR</p>
-                      </div>
+              <FadeIn>
+                <div className="bg-gradient-to-br from-catnip-accent/5 to-catnip-warm/50 rounded-xl p-8 border-l-4 border-catnip-accent">
+                  <p className="text-lg text-gray-800 mb-4 italic">
+                    "Supporting local artists and riding custom wood? That's the whole vibe. Plus they sponsor our DIY park. Real community shit."
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-catnip-accent rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      S
+                    </div>
+                    <div>
+                      <p className="font-bold text-black">Sam Wu</p>
+                      <p className="text-sm text-gray-600">Portland, OR</p>
                     </div>
                   </div>
-                </FadeIn>
-              </Stagger>
-            </div>
+                </div>
+              </FadeIn>
+            </Stagger>
 
             <FadeIn>
               <div className="text-center">

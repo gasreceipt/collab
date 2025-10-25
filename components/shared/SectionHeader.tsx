@@ -20,18 +20,17 @@ export default function SectionHeader({
     <FadeIn>
       <div
         className={clsx(
-          'mb-16',
+          'section-header',
           align === 'center' && 'text-center',
           align === 'right' && 'text-right',
           className
         )}
       >
-        <h2 className="text-4xl md:text-5xl font-bold mb-4">{title}</h2>
+        <h2 className="section-title">{title}</h2>
         {subtitle && (
           <p className={clsx(
-            'text-xl text-gray-600',
-            align === 'center' && 'max-w-3xl mx-auto',
-            align === 'left' && 'max-w-3xl'
+            'section-subtitle',
+            align === 'left' && 'mx-0'
           )}>
             {subtitle}
           </p>

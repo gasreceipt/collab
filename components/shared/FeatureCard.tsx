@@ -20,16 +20,16 @@ export default function FeatureCard({
   className = '',
 }: FeatureCardProps) {
   const variants = {
-    default: 'bg-gray-50 hover:bg-gray-100',
+    default: 'bg-gray-50 hover:bg-gray-100 border border-gray-100',
     bordered: 'border-2 border-gray-200 hover:border-gray-300 bg-white',
-    elevated: 'bg-white shadow-md hover:shadow-xl',
+    elevated: 'bg-white card-shadow border border-gray-100',
   };
 
   return (
     <FadeIn>
       <div
         className={clsx(
-          'rounded-xl p-8 transition-all duration-300',
+          'rounded-xl p-8 transition-all duration-300 hover:scale-105 transform',
           variants[variant],
           className
         )}

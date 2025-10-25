@@ -106,26 +106,22 @@ export default function HubPage() {
       <section className="section-padding bg-gray-50">
         <div className="container-custom">
           <SectionHeader title="The Ecosystem" subtitle="Three brands, three philosophies, one commitment: make less, make it better." />
-          <Stagger staggerDelay={0.15}>
+          <Stagger staggerDelay={0.15} className="brand-grid">
             {brands.map((brand) => (
-              <div key={brand.name} className="mb-8 last:mb-0">
-                <BrandCard {...brand} dataTrackId={`brand-card-${brand.name.toLowerCase().replace(' ', '-')}`} />
-              </div>
+              <BrandCard key={brand.name} {...brand} dataTrackId={`brand-card-${brand.name.toLowerCase().replace(' ', '-')}`} />
             ))}
           </Stagger>
         </div>
       </section>
 
-      <section className="section-padding">
+      <section className="section-padding bg-white">
         <div className="container-custom">
           <SectionHeader title="Why vSMPL Exists" subtitle="The consumer economy is broken. We're building an alternative—one product, one purchase, one promise at a time." />
-          <div className="grid md:grid-cols-3 gap-8">
-            <Stagger staggerDelay={0.2}>
-              {values.map((value) => (
-                <FeatureCard key={value.title} icon={value.icon} title={value.title} description={value.description} />
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.2} className="feature-grid">
+            {values.map((value) => (
+              <FeatureCard key={value.title} icon={value.icon} title={value.title} description={value.description} />
+            ))}
+          </Stagger>
         </div>
       </section>
 

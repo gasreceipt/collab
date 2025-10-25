@@ -42,13 +42,6 @@ export default function AnalyticsDashboard() {
     end: new Date().toISOString().split('T')[0],
   });
 
-  useEffect(() => {
-    fetchDashboardData();
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchDashboardData, 30000);
-    return () => clearInterval(interval);
-  }, [dateRange]);
-
   const fetchDashboardData = async () => {
     try {
       const response = await fetch(
@@ -62,6 +55,13 @@ export default function AnalyticsDashboard() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDashboardData();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchDashboardData, 30000);
+    return () => clearInterval(interval);
+  }, [dateRange.start, dateRange.end]);
 
   const handleExport = async (format: 'json' | 'csv', table: string) => {
     try {
@@ -101,10 +101,10 @@ export default function AnalyticsDashboard() {
     );
   }
 
-  // Calculate conversion rate
-  const totalConversions = data.conversionStats.find((s) => s.conversion_status !== 'none')?.count || 0;
+  // Calculate conversion rate with null checks
+  const totalConversions = data?.conversionStats?.find((s) => s.conversion_status !== 'none')?.count || 0;
   const conversionRate =
-    data.totalSessions > 0 ? ((totalConversions / data.totalSessions) * 100).toFixed(2) : '0.00';
+    data?.totalSessions > 0 ? ((totalConversions / data.totalSessions) * 100).toFixed(2) : '0.00';
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -149,12 +149,12 @@ export default function AnalyticsDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white rounded-lg shadow p-6">
             <p className="text-sm text-gray-600 mb-1">Total Sessions</p>
-            <p className="text-3xl font-bold">{data.totalSessions}</p>
+            <p className="text-3xl font-bold">{data?.totalSessions || 0}</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <p className="text-sm text-gray-600 mb-1">Email Signups</p>
             <p className="text-3xl font-bold">
-              {data.emailSignups.reduce((sum, item) => sum + item.count, 0)}
+              {data?.emailSignups?.reduce((sum, item) => sum + item.count, 0) || 0}
             </p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
@@ -164,7 +164,7 @@ export default function AnalyticsDashboard() {
           <div className="bg-white rounded-lg shadow p-6">
             <p className="text-sm text-gray-600 mb-1">Avg Scroll Depth</p>
             <p className="text-3xl font-bold">
-              {data.scrollDepth.length > 0
+              {data?.scrollDepth?.length > 0
                 ? Math.round(
                     data.scrollDepth.reduce((sum, item) => sum + item.avg_scroll, 0) /
                       data.scrollDepth.length
@@ -179,7 +179,7 @@ export default function AnalyticsDashboard() {
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold mb-4">Page Views by Brand</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.pageViews}>
+            <BarChart data={data?.pageViews || []}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="page" />
               <YAxis />
@@ -198,7 +198,7 @@ export default function AnalyticsDashboard() {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={data.deviceStats}
+                  data={data?.deviceStats || []}
                   dataKey="count"
                   nameKey="device_type"
                   cx="50%"
@@ -206,7 +206,7 @@ export default function AnalyticsDashboard() {
                   outerRadius={100}
                   label
                 >
-                  {data.deviceStats.map((entry, index) => (
+                  {(data?.deviceStats || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -222,7 +222,7 @@ export default function AnalyticsDashboard() {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={data.conversionStats}
+                  data={data?.conversionStats || []}
                   dataKey="count"
                   nameKey="conversion_status"
                   cx="50%"
@@ -230,7 +230,7 @@ export default function AnalyticsDashboard() {
                   outerRadius={100}
                   label
                 >
-                  {data.conversionStats.map((entry, index) => (
+                  {(data?.conversionStats || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -254,7 +254,7 @@ export default function AnalyticsDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {data.topElements.slice(0, 10).map((element, index) => (
+                {(data?.topElements || []).slice(0, 10).map((element, index) => (
                   <tr key={index} className="border-b hover:bg-gray-50">
                     <td className="py-3 px-4 font-mono text-sm">{element.element_id}</td>
                     <td className="py-3 px-4">{element.element_category}</td>
@@ -270,7 +270,7 @@ export default function AnalyticsDashboard() {
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <h2 className="text-xl font-bold mb-4">Email Signups by Page</h2>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data.emailSignups}>
+            <BarChart data={data?.emailSignups || []}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="page" />
               <YAxis />
@@ -282,7 +282,7 @@ export default function AnalyticsDashboard() {
         </div>
 
         {/* A/B Test Results */}
-        {data.abTestResults.length > 0 && (
+        {(data?.abTestResults?.length || 0) > 0 && (
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <h2 className="text-xl font-bold mb-4">A/B Test Performance</h2>
             <div className="overflow-x-auto">
@@ -296,7 +296,7 @@ export default function AnalyticsDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.abTestResults.map((result, index) => {
+                  {(data?.abTestResults || []).map((result, index) => {
                     const ctr =
                       result.sessions > 0
                         ? ((result.cta_clicks / result.sessions) * 100).toFixed(2)
@@ -330,7 +330,7 @@ export default function AnalyticsDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {data.recentSubmissions.slice(0, 10).map((submission, index) => (
+                {(data?.recentSubmissions || []).slice(0, 10).map((submission, index) => (
                   <tr key={index} className="border-b hover:bg-gray-50">
                     <td className="py-3 px-4 font-mono text-sm">{submission.email}</td>
                     <td className="py-3 px-4">{submission.page}</td>

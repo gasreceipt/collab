@@ -57,7 +57,7 @@ export default function UniformishPage() {
       id: 'uniform-003',
       name: 'Utility Pant',
       price: 178,
-      description: 'Reinforced seams. Articulated knees. The last pants you'll ever buy.',
+      description: 'Reinforced seams. Articulated knees. The last pants you\'ll ever buy.',
       brand: 'uniformish' as const,
       limited: 60,
       gradient: 'from-blue-900/10 to-blue-800/5',
@@ -77,12 +77,12 @@ export default function UniformishPage() {
     },
     {
       title: 'Lifetime Guarantee',
-      description: 'We repair your Uniformish garment for free, forever. Ripped seam? Send it back. Worn zipper? We'll replace it. Built to outlast you.',
+      description: 'We repair your Uniformish garment for free, forever. Ripped seam? Send it back. Worn zipper? We\'ll replace it. Built to outlast you.',
       icon: <Infinity className="w-12 h-12" />,
     },
     {
       title: 'Honest Scarcity',
-      description: 'Every drop is limited to 50-75 units. Not marketing—production reality. When it's gone, it's gone. No restocks. No pre-orders. Just truth.',
+      description: 'Every drop is limited to 50-75 units. Not marketing—production reality. When it\'s gone, it\'s gone. No restocks. No pre-orders. Just truth.',
       icon: <Lightning className="w-12 h-12" />,
     },
   ];
@@ -113,13 +113,11 @@ export default function UniformishPage() {
       <section className="section-padding bg-black">
         <div className="container-custom">
           <SectionHeader title="Why Uniformish Exists" />
-          <div className="grid md:grid-cols-3 gap-8">
-            <Stagger staggerDelay={0.15}>
-              {principles.map((principle) => (
-                <FeatureCard key={principle.title} {...principle} className="bg-uniformish-charcoal hover:bg-uniformish-charcoal/80 text-white" />
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.15} className="feature-grid">
+            {principles.map((principle) => (
+              <FeatureCard key={principle.title} {...principle} className="bg-uniformish-charcoal hover:bg-uniformish-charcoal/80 text-white" />
+            ))}
+          </Stagger>
         </div>
       </section>
 
@@ -129,13 +127,11 @@ export default function UniformishPage() {
             title="Current Drop"
             subtitle="Limited availability. Ships within 2 weeks. Every piece numbered and documented."
           />
-          <div className="grid md:grid-cols-3 gap-8">
-            <Stagger staggerDelay={0.1}>
-              {products.map((product) => (
-                <ProductCard key={product.id} {...product} />
-              ))}
-            </Stagger>
-          </div>
+          <Stagger staggerDelay={0.1} className="product-grid">
+            {products.map((product) => (
+              <ProductCard key={product.id} {...product} />
+            ))}
+          </Stagger>
         </div>
       </section>
 
@@ -163,7 +159,7 @@ export default function UniformishPage() {
               <div className="border-l-4 border-uniformish-accent pl-6">
                 <h3 className="text-xl font-bold mb-2">Lifetime Repair Policy</h3>
                 <p className="text-gray-400">
-                  Send it back, we'll fix it—for free, forever. Ripped? Patched. Faded? Re-dyed. Worn zipper? Replaced. We stand behind every stitch. Built to outlast trends, outlast you.
+                  Send it back, we\'ll fix it—for free, forever. Ripped? Patched. Faded? Re-dyed. Worn zipper? Replaced. We stand behind every stitch. Built to outlast trends, outlast you.
                 </p>
               </div>
             </FadeIn>

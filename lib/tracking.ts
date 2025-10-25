@@ -144,21 +144,32 @@ class AnalyticsTracker {
     };
   }
 
-  // Get current A/B test variant
+    // Get current A/B test variant
   private getCurrentVariant(): Variant | undefined {
     if (typeof window === 'undefined') return undefined;
 
-    // Check cookies for assigned variants
-    const cookies = document.cookie.split('; ');
-    for (const cookie of cookies) {
-      if (cookie.startsWith('ab_test_')) {
-        const value = cookie.split('=')[1];
-        if (['control', 'variant_a', 'variant_b'].includes(value)) {
-          return value as Variant;
-        }
-      }
-    }
+    // Implementation would depend on A/B testing logic
     return undefined;
+  }
+
+  // Ensure session exists in database
+  private async ensureSession(page: PageType): Promise<void> {
+    if (typeof window === 'undefined') return;
+
+    try {
+      await fetch('/api/analytics/session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: this.sessionId,
+          device_type: this.getDeviceType(),
+          referrer: document.referrer,
+          page: page,
+        }),
+      });
+    } catch (error) {
+      console.error('Failed to ensure session:', error);
+    }
   }
 
   // Track event
@@ -188,11 +199,14 @@ class AnalyticsTracker {
   }
 
   // Track page view
-  public trackPageView(page: PageType) {
+  public async trackPageView(page: PageType) {
     this.currentPage = page;
     this.pageLoadTime = Date.now();
     this.scrollDepth = 0;
     this.maxScrollDepth = 0;
+
+    // Ensure session exists in database first
+    await this.ensureSession(page);
 
     this.track({
       event_type: 'page_view',
@@ -205,7 +219,7 @@ class AnalyticsTracker {
       const loadTime = perfData.loadEventEnd - perfData.navigationStart;
       const domInteractive = perfData.domInteractive - perfData.navigationStart;
 
-      // Send performance data separately
+      // Send performance data separately with delay to ensure session exists
       setTimeout(() => {
         fetch('/api/analytics/performance', {
           method: 'POST',
@@ -221,7 +235,7 @@ class AnalyticsTracker {
         }).catch(() => {
           // Silently fail
         });
-      }, 1000);
+      }, 2000); // Increased delay to 2 seconds
     }
   }
 
@@ -239,23 +253,25 @@ class AnalyticsTracker {
         element_text: elementText,
       });
 
-      // Send detailed interaction separately
-      fetch('/api/analytics/interaction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: this.sessionId,
-          page: this.currentPage,
-          element_id: elementId,
-          element_type: elementType,
-          interaction_type: 'click',
-          time_to_interaction: Date.now() - this.pageLoadTime,
-          element_category: elementCategory,
-          ab_test_variant: this.getCurrentVariant(),
-        }),
-      }).catch(() => {
-        // Silently fail
-      });
+      // Send detailed interaction separately with delay to ensure session exists
+      setTimeout(() => {
+        fetch('/api/analytics/interaction', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: this.sessionId,
+            page: this.currentPage,
+            element_id: elementId,
+            element_type: elementType,
+            interaction_type: 'click',
+            time_to_interaction: Date.now() - this.pageLoadTime,
+            element_category: elementCategory,
+            ab_test_variant: this.getCurrentVariant(),
+          }),
+        }).catch(() => {
+          // Silently fail
+        });
+      }, 500);
     }
   }
 
@@ -310,19 +326,21 @@ class AnalyticsTracker {
           element_text: `${this.maxScrollDepth}% scroll depth`,
         });
 
-        // Send detailed scroll tracking
-        fetch('/api/analytics/scroll', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            session_id: this.sessionId,
-            page: this.currentPage,
-            scroll_percentage: this.maxScrollDepth,
-            scroll_direction: 'down',
-          }),
-        }).catch(() => {
-          // Silently fail
-        });
+        // Send detailed scroll tracking with delay to ensure session exists
+        setTimeout(() => {
+          fetch('/api/analytics/scroll', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              session_id: this.sessionId,
+              page: this.currentPage,
+              scroll_percentage: this.maxScrollDepth,
+              scroll_direction: 'down',
+            }),
+          }).catch(() => {
+            // Silently fail
+          });
+        }, 1000);
       }
     }
   }
