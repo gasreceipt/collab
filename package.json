@@ -17,7 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "better-sqlite3": "^12.4.1",
+    "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "framer-motion": "^12.23.24",
     "next": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
